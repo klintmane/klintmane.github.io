@@ -7,7 +7,7 @@
 
 .text-morph ul {
 
-  list-style: circle;
+  list-style: none;
   -webkit-animation: 6s linear 0s normal none infinite change;
           animation: 6s linear 0s normal none infinite change;
 }
