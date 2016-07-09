@@ -29,9 +29,9 @@ The ./resources/css folder contains the css files :
 - textmorph.css (used on the homepage for the changing text animation under my name)
 
 **Note:** I should probably mention that bootstrap.min.css is responsible for much of the styling and is not the vanilla bootstrap file.
-You can get it here : (https://bootswatch.com/readable)
+You can get it here: [Bootswatch](https://bootswatch.com/readable)
 
-The ./resources/js and ./resources/fonts folder both contain bootstrap content.
+The ./resources/js and ./resources/fonts folders both contain bootstrap content.
 
 The./resources/font-awesome is the Font Awesome folder left untouched.
 
