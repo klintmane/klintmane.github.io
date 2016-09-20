@@ -1,4 +1,5 @@
 @import '/public/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css?family=Libre+Baskerville';
 
 body {
     font-family: 'Libre Baskerville', serif;
