@@ -5,6 +5,19 @@ h1, h2, h3, h4, h5, h6, p, a {
     font-family: 'Libre Baskerville', serif;
 }
 
+.navbarish {
+margin-top: 2%;
+}
+
+.navbarish a {
+    font-size: 90%;
+    color: black;
+}
+
+.activeish {
+text-decoration: underline;
+}
+
 .oldish {
     font-style: italic;
     color: black;
