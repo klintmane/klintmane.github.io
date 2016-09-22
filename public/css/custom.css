@@ -1,6 +1,12 @@
 @import '/public/css/bootstrap.min.css';
-@import 'https://fonts.googleapis.com/css?family=Libre+Baskerville';
+@import 'https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i';
 
-body {
+h1, h2, h3, h4, h5, h6, p, a {
     font-family: 'Libre Baskerville', serif;
+}
+
+.oldish {
+    font-style: italic;
+    color: black;
+    text-decoration: underline;
 }
