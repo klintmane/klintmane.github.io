@@ -1,25 +1,37 @@
-@import '/public/css/bootstrap.min.css';
-@import 'https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i';
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300|Droid+Sans|Droid+Serif');
 
-h1, h2, h3, h4, h5, h6, p, a {
-    font-family: 'Libre Baskerville', serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
 }
 
-.navbarish {
-margin-top: 2%;
+p, a {
+font-family: 'Droid Sans', sans-serif;
 }
 
-.navbarish a {
-    font-size: 90%;
-    color: black;
+.text-oldy {
+  font-family: 'Droid Serif', serif;
 }
 
-.activeish {
-text-decoration: underline;
+.text-oldy a {
+  color:black;
+  font-family: 'Droid Serif', serif;
 }
 
-.oldish {
-    font-style: italic;
-    color: black;
-    text-decoration: underline;
+.text-oldy a:hover {
+  color:gray;
+}
+
+.text-subby {
+ font-style: italic;
+ color:gray;
+}
+
+.text-nomargy {
+  margin-top:0;
+}
+
+.hr-texty {
+  color:grey;
+  text-align: center;
+  margin:5em;
 }
