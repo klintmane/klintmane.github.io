@@ -12,15 +12,6 @@ font-family: 'Droid Sans', sans-serif;
   font-family: 'Droid Serif', serif;
 }
 
-.text-oldy a {
-  color:black;
-  font-family: 'Droid Serif', serif;
-}
-
-.text-oldy a:hover {
-  color:gray;
-}
-
 .text-subby {
  font-style: italic;
  color:gray;
@@ -30,8 +21,41 @@ font-family: 'Droid Sans', sans-serif;
   margin-top:0;
 }
 
-.hr-texty {
+.text-liny {
   color:grey;
   text-align: center;
-  margin:5em;
+  margin:3em;
+}
+
+.headliny {
+	margin-top:5em;
+	margin-bottom:5em;
+}
+
+.navy {
+	margin-top:5em;
+	margin-bottom:5em;
+}
+
+.navy a, .navy p, .navy h3, .navy h4{
+	color:black;
+	font-family: 'Droid Serif', serif;
+}
+
+.navy a:hover {
+  color:gray;
+}
+
+.footery {
+	margin-top:5em;
+	margin-bottom:2em;
+}
+
+.footery p, .footery a {
+	font-style: italic;
+ 	color:gray;
+}
+
+.footery a:hover {
+ 	color:black;
 }
