@@ -70,7 +70,7 @@ font-family: 'Droid Sans', sans-serif;
 	background-color: white;
 	border-radius: 1em;
     border: 0.15em solid black;
-    box-shadow: 0.5em 0.5em 0.1em gray;
+    box-shadow: 0.5em 0.5em gray;
 }
 
 #consoly h4 {
