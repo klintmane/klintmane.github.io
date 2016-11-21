@@ -59,3 +59,46 @@ font-family: 'Droid Sans', sans-serif;
 .footery a:hover {
  	color:black;
 }
+
+#consoly {
+	max-width: 25em;
+	margin: auto;
+	padding:1em;
+	text-align: left;
+	font-style: italic;
+	color:black;
+	background-color: white;
+	border-radius: 1em;
+    border: 0.15em solid black;
+    box-shadow: 0.5em 0.5em 0.1em gray;
+}
+
+#consoly h4 {
+	font-weight: bold;
+}
+
+#consoly p {
+	color:gray;
+}
+
+#consoly:hover {
+	color:white;
+	background-color: #073642;
+	border: 0.15em solid black;
+}
+
+#consoly:hover #echoy {
+		color:#859900;
+}
+
+#consoly:hover p {
+	color:#839496;
+}
+
+#consoly:hover h4 {
+	font-weight: bold;
+	color:#2aa198;
+}
+
+#consoly, #consoly :hover{animation:opac 0.3s}
+@keyframes opac{0%{opacity:1} 50%{opacity:0} 100%{opacity:1}}
