@@ -1,136 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+<!doctype html>
+<html lang="">
+  <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Hi, my name is Klint. I am an uncomplicated software engineer, who loves simplicity and beautiful design.">
-    <meta name="author" content="Klint Mane">
-
-    <title>klintM.com</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>KlintM | hi</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="./favicon.png">
-    <link rel="stylesheet" href="./public/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./public/fa/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./public/css/custom.css">
-</head>
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <main>
+      <div class="main-item">
+        <header>
+          <h1>KlintM<span class="sm">ane</span></h1>
+        </header>
+        <h4>Currently: Fullstack at <a href="http://paywithflow.com">paywithflow.com</a></h4>
+        <h4>Enjoys. stuff. like:</h4>
+        <dl>
+          <dt>Programming the World Wide Web</dt>
+          <dd>
+            Elixir, Javascript
+          </dd>
+          <dt>Consuming Libraries/Frameworks</dt>
+          <dd>
+            Phoenix, React, NodeJS
+          </dd>
+          <dt>Casual Art</dt>
+          <dd>
+            HTML/CSS, Design, Illustration
+          </dd>
+          <dt>Consuming Books</dt>
+          <dd>
+            Technical, non-technical(one day)
+          </dd>
+          <dt>Dreaming ahead</dt>
+          <dd>
+            <i class="fa fa-heart" aria-hidden="true"></i>
+              With <a href="https://github.com/ndrianahani">@ndrianahani</a>
+          </dd>
+        </dl>
+        <a id="more" class="btn" href="javascript:void" onclick="javascript:more();">more <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
+        <a id="less" class="btn" href="javascript:void" onclick="javascript:less();">less <i class="fa fa-angle-double-up" aria-hidden="true"></i></a>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-item">
 
-<body>
-    <!--main container-->
-    <div class="container">
-        <!--Headline-->
-        <div class="headliny text-center">
-            <h1>_klint<span class="text-oldy">M</span></h1>
-            <img src="./public/img/divider.png" width="180em">
-            <div id="consoly">
-                <h4><span id="echoy"># echo</span> $greeting</h4>
-                <p>Hi, my name is Klint. <br>I am an uncomplicated software engineer,<br> who loves simplicity and beautiful design.</p>
-            </div>
-            
-        </div>
-        <!--endof Headline-->
-        <!--Navigation-->
-        <nav class="navy">
-            <hr>
-            <ul class="list-inline text-center">
-                <li><a href="http://journal.klintm.com">JOURNAL</a></li>|
-                <li><a href="#">HOME</a></li>|
-                <li><a href="https://goo.gl/QIpqqi" target="_blank">RÉSUMÉ</a></li>
-            </ul>
-            <hr>
-        </nav>
-        <!--endof Navigation-->
-        <!--Item-->
-        <div class="row">
-            <div class="col-md-6 text-right">
-                <h2 class="text-nomargy">I like to build things</h2>
-                <p class="text-subby">... that work, flawlesly.</p>
-                <p>(now - forever)</p>
-            </div>
-            <div class="col-md-4">
-                <p class="text-justify">I strongly believe in technology’s fast pace and I am always on the lookout for the latest and greatest. I’m experienced in building applications, servers, clients and everything in between.</p>
-            </div>
-        </div>
-        <!--endof Item-->
-
-        <!--divider-->
-            <p class="text-liny">-x-x-x-</p>
-        <!--endof divider-->
-
-        <!--Item-->
-        <div class="row">
-            <div class="col-md-6 text-right">
-                <h2 class="text-nomargy">I am skilled</h2>
-                <p class="text-subby">in more than a few areas.</p>
-            </div>
-            <div class="col-md-4">
-                <p class="text-justify">I like to tinker and try a lot of stuff out. I have a background in software, design and IT, which has helped me a lot in building successful projects, from start to finish.</p>
-            </div>
-        </div>
-        <!--endof Item-->
-
-        <!--divider-->
-            <p class="text-liny">-x-x-x-</p>
-        <!--endof divider-->
-
-        <!--Item-->
-        <div class="row">
-            <div class="col-md-6 text-right">
-                <h2 class="text-nomargy">The things I avoid</h2>
-                <p class="text-subby">like the plague.</p>
-                <p>(until the plague takes me)</p>
-            </div>
-            <div class="col-md-4">
-                <p class="text-justify"><em>Magic</em> - Library 'x' can’t save you or your project, unless you understand how things work at a lower level.<br><br><em>Complexity</em> - is the worst enemy of productivity, and after awhile, maintenance and scalability.<br><br><em>That 20yo framework</em> - building applications on top of a 20 year old codebase will open the door to a lot of bad things, for all the right reasons.</p>
-            </div>
-        </div>
-        <!--endof Item-->
-
-        <!--contact-->
-        <div class="text-center">
-            <div class="navy">
-                <hr>
-                <h4>CONTACT ME</h4>
-                <hr>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <h2>Let's talk</h2>
-                    <p>For general inquiries please contact me at<br>
-                    <em>klintmane[at]outlook.com</em>.</p>
-                </div>
-                <div class="col-md-6">
-                    <h2>Let’s build together</h2>
-                    <p>Need my help or my skillset? Feel free to send me an email at<br>
-                    <em>hi[at]klintm.com</em>.</p>
-                </div>
-            </div>
-        </div>
-        <!--endof contact-->
-
-        <!--footer-->
-        <div class="footery text-center">
-            <hr>
-                <div>
-                    <p>Klint Mane, 2016</p>
-                    <p><a href="https://github.com/klintmane" target="_blank"><i class="fa fa-github"></i></a> - 
-                    <a href="https://linkedin.com/in/klintmane" target="_blank"><i class="fa fa-linkedin"></i></a><p>
-                </div>
-        </div>
-        <!--endof footer-->
-    </div>
-    <!--endof main container-->
-</body>
-    
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-86296785-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-    
+        <div><a href="https://github.com/klintmane"><i class="fa fa-github" aria-hidden="true"></i></a></div>
+        <div><a href="mailto:ping@klintm.com"><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
+        <div><a href="https://linkedin.com/in/klintmane"><i class="fa fa-linkedin" aria-hidden="true"></i></a></div>
+      </div>
+    </footer>
+  </body>
 </html>
+<script>
+document.onreadystatechange = () => {
+  if (document.readyState === "complete") {
+    less();
+  }
+};
+
+function less() {
+  dds = document.getElementsByTagName("dd");
+  for (var i = 0; dds[i]; i++) {
+    dds[i].style.height = 0;
+    dds[i].style.visibility = "hidden";
+  }
+  document.getElementById("more").style.display = "inline";
+  document.getElementById("less").style.display = "none";
+}
+
+function more() {
+  dds = document.getElementsByTagName("dd");
+  for (var i = 0; dds[i]; i++) {
+    dds[i].style.height = "100%";
+    dds[i].style.visibility = "visible";
+  }
+  document.getElementById("more").style.display = "none";
+  document.getElementById("less").style.display = "inline";
+}
+</script>
