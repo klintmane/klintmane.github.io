@@ -3,85 +3,52 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Klint M</title>
+    <title>KlintM</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="./favicon.png">
-    <link rel="stylesheet" href="css/normalize.min.css">
-    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="src/css/normalize.min.css">
+    <link rel="stylesheet" href="src/css/main.css">
   </head>
   <body>
     <main>
       <div class="main-item">
-        <header>
-          <h1>KlintM<span class="sm">ane</span></h1>
-        </header>
-        <h4>Currently: Fullstack at <a href="http://paywithflow.com">paywithflow.com</a></h4>
-        <h4>Enjoys. stuff. like:</h4>
+        <h1>Mr. Klint,</h1>
+        <h3>Writes &lt;/&gt;.</h3>
+        <p>Currently: Fullstack at <a href="http://paywithflow.com" target="_blank">paywithflow.com</a></p>
+        <h3>Enjoys. stuff. like:</h3>
         <dl>
           <dt>Programming the World Wide Web</dt>
-          <dd>
-            Elixir, Javascript, HTML/CSS
-          </dd>
+          <dd>Elixir, Javascript, HTML/CSS</dd>
           <dt>Consuming Libraries/Frameworks</dt>
-          <dd>
-            Phoenix, React, NodeJS
-          </dd>
+          <dd>Phoenix, React, NodeJS</dd>
           <dt>Casual Art</dt>
-          <dd>
-            Design, Illustration
-          </dd>
+          <dd>Design, Illustration</dd>
           <dt>Consuming Books</dt>
-          <dd>
-            Technical, non-technical(one day)
-          </dd>
+          <dd>Technical, non-technical(one day)</dd>
           <dt>Dreaming ahead</dt>
-          <dd>
-            <i class="fa fa-heart" aria-hidden="true"></i>
-              With <a href="https://github.com/ndrianahani">@ndrianahani</a>
-          </dd>
+          <dd>❤&nbsp;With&nbsp;<a href="https://github.com/ndrianahani">@ndrianahani</a></dd>
         </dl>
-        <a id="more" class="btn" href="javascript:void" onclick="javascript:more();">more <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
-        <a id="less" class="btn" href="javascript:void" onclick="javascript:less();">less <i class="fa fa-angle-double-up" aria-hidden="true"></i></a>
+        <button id="more" class="btn" onclick="document.querySelector('.main-item').classList.add('detailed');">more &gt;</button>
+        <button id="less" class="btn" onclick="document.querySelector('.main-item').classList.remove('detailed');">less &lt;</button>
       </div>
     </main>
     <footer>
       <div class="footer-item">
-        <div><a href="https://github.com/klintmane"><i class="fa fa-github" aria-hidden="true"></i></a></div>
-        <div><a href="https://twitter.com/klintmane"><i class="fa fa-twitter" aria-hidden="true"></i></a></div>
-        <div><a href="mailto:ping@klintm.com"><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
+        <div><a href="https://github.com/klintmane" target="_blank">github</a></div>
+      </div>
+      <div class="footer-item">
+        <div><a href="https://www.npmjs.com/~klintmane" target="_blank">npm</a></div>
+      </div>
+      <div class="footer-item">
+        <div><a href="https://linkedin.com/in/klintmane" target="_blank">linkedin</a></div>
+      </div>
+      <div class="footer-item">
+        <div><a href="mailto:ping@klintm.com">mail</a></div>
       </div>
     </footer>
   </body>
 </html>
-<script>
-document.onreadystatechange = () => {
-  if (document.readyState === "complete") {
-    less();
-  }
-};
-
-function less() {
-  dds = document.getElementsByTagName("dd");
-  for (var i = 0; dds[i]; i++) {
-    dds[i].style.height = 0;
-    dds[i].style.visibility = "hidden";
-  }
-  document.getElementById("more").style.display = "inline";
-  document.getElementById("less").style.display = "none";
-}
-
-function more() {
-  dds = document.getElementsByTagName("dd");
-  for (var i = 0; dds[i]; i++) {
-    dds[i].style.height = "100%";
-    dds[i].style.visibility = "visible";
-  }
-  document.getElementById("more").style.display = "none";
-  document.getElementById("less").style.display = "inline";
-}
-</script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -91,5 +58,4 @@ function more() {
 
   ga('create', 'UA-86296785-1', 'auto');
   ga('send', 'pageview');
-
 </script>
