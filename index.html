@@ -1,61 +1,109 @@
 <!doctype html>
-<html lang="">
+
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>KlintM</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Klint Mane</title>
+
+    <meta charset="utf-8" />
+    <meta name="description" content="Klint Mane | Full Stack Software Engineer, currently programming the World Wide Web." />
+    <meta name="author" content="Klint Mane" />
+
     <link rel="shortcut icon" type="image/png" href="./favicon.png">
-    <link rel="stylesheet" href="src/css/normalize.min.css">
-    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="./public/css/index.css" />
   </head>
+
   <body>
-    <main>
-      <div class="main-item">
-        <h1>Mr. Klint,</h1>
-        <h3>Writes &lt;/&gt;.</h3>
-        <p>Currently: Fullstack at <a href="http://paywithflow.com" target="_blank">paywithflow.com</a></p>
-        <h3>Enjoys. stuff. like:</h3>
-        <dl>
-          <dt>Programming the World Wide Web</dt>
-          <dd>Elixir, Javascript, HTML/CSS</dd>
-          <dt>Consuming Libraries/Frameworks</dt>
-          <dd>Phoenix, React, NodeJS</dd>
-          <dt>Casual Art</dt>
-          <dd>Design, Illustration</dd>
-          <dt>Consuming Books</dt>
-          <dd>Technical, non-technical(one day)</dd>
-          <dt>Dreaming ahead</dt>
-          <dd>❤&nbsp;With&nbsp;<a href="https://github.com/ndrianahani">@ndrianahani</a></dd>
-        </dl>
-        <button id="more" class="btn" onclick="document.querySelector('.main-item').classList.add('detailed');">more &gt;</button>
-        <button id="less" class="btn" onclick="document.querySelector('.main-item').classList.remove('detailed');">less &lt;</button>
-      </div>
-    </main>
-    <footer>
-      <div class="footer-item">
-        <div><a href="https://github.com/klintmane" target="_blank">github</a></div>
-      </div>
-      <div class="footer-item">
-        <div><a href="https://www.npmjs.com/~klintmane" target="_blank">npm</a></div>
-      </div>
-      <div class="footer-item">
-        <div><a href="https://linkedin.com/in/klintmane" target="_blank">linkedin</a></div>
-      </div>
-      <div class="footer-item">
-        <div><a href="mailto:ping@klintm.com">mail</a></div>
-      </div>
-    </footer>
+    <div class="page-container">
+      <nav class="page-nav">
+        <a href="" class="nav-brand">
+          <img alt="personal logo">
+        </a>
+
+        <a href="https://medium.com/@klintmane" target="_blank">blog</a>
+
+        <a href="mailto:ping@klintm.com" target="_blank">contact</a>
+      </nav>
+
+      <main class="page-content">
+        <section class="content-logo">  
+          <img alt="personal logo">
+        </section>
+
+        <section class="content-title">
+          <h1>Klint Mane</h1>
+        </section>
+
+        <section class="content-typed">
+          <span id="typed"></span> 
+        </section>
+
+        <section class="content-articles">
+          <article>
+            <h1>Likes</h1>
+
+            <ul>
+              <li>Elixir &amp; Phoenix</li>
+              <li>JavaScript, React/Native, Node</li>
+              <li>Visual Arts</li>
+              <li>Music</li>
+              <li><a href="https://github.com/ndrianahani" target="_blank">ndrianahani</a></li>
+            </ul>
+          </article>
+
+          <article>
+            <h1>Seen at</h1>
+
+            <ul>
+              <li><a href="http://paywithflow.com" target="_blank">Flow Financial Solutions</a>, Full Stack Dev (2016-currently)</li>
+              <li><a href="https://bntelectronics.com" target="_blank">BNT Electronics</a>, SW Engineer (2015-2017)</li>
+            </ul>
+          </article>
+
+          <article>
+            <h1>Personal Projects</h1>
+
+            <ul>
+              <li>Stay tuned</li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    
+      <footer class="page-footer">
+        <a href="https://github.com/klintmane" target="_blank">github</a>
+
+        <a href="https://linkedin.com/in/klintmane" target="_blank">linkedin</a>
+
+        <a href="https://twitter.com/klintmane" target="_blank">twitter</a>
+      </footer>
+    </div>
   </body>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.5/typed.js"></script>
+
+  <script>
+  function ready(fn) { document.readyState == 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
+
+  ready(function() {
+    var typed = new Typed('#typed', {
+      strings: [
+        'npm run greeting ^500.^500.^500.',
+        '> Hey, I see you!',
+        '> I am a full stack software engineer from Tirana, Albania, currently programming the World Wide Web.'
+      ],
+      typeSpeed: 20,
+      cursorChar: '_',
+    });
+  });
+  </script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-86296785-1', 'auto');
+    ga('send', 'pageview');
+  </script>
 </html>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-86296785-1', 'auto');
-  ga('send', 'pageview');
-</script>
