@@ -34,7 +34,7 @@ ul>li:before {
 }
 
 .page-container>* {
-  padding: 1em 0 1em 0;
+  padding: 2em 0 2em 0;
 }
 
 .page-nav {
@@ -71,7 +71,7 @@ ul>li:before {
 }
 
 .nav-brand>img {
-  content: url("../assets/svg/logo.svg");
+  content: url("../assets/svg/km-logo.svg");
   width: 20px;
   height: 20px;
   border: 2px solid black;
@@ -79,7 +79,7 @@ ul>li:before {
 }
 
 .nav-brand:hover>img {
-  content: url("../assets/svg/logo-white.svg");
+  content: url("../assets/svg/km-logo-white.svg");
   background: #422D88;
   border-color: white;
 }
@@ -96,7 +96,7 @@ ul>li:before {
   height: 150px;
   min-width: 150px;
   width: 150px;
-  background-image: url("../assets/img/watercolor-circle.png");
+  background-image: url("../assets/img/watercolor-bg.png");
   background-size: cover;
   border-radius: 50%;
   display: flex;
@@ -106,7 +106,7 @@ ul>li:before {
 
 .content-logo>img {
   width: 90px;
-  content: url("../assets/svg/logo-white.svg");
+  content: url("../assets/svg/km-logo-white.svg");
 }
 
 .content-typed {
