@@ -8,7 +8,7 @@
     <meta name="description" content="Klint Mane | Full Stack Software Engineer, currently programming the World Wide Web." />
     <meta name="author" content="Klint Mane" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <link rel="shortcut icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="./public/css/index.css" />
   </head>
@@ -16,9 +16,7 @@
   <body>
     <div class="page-container">
       <nav class="page-nav">
-        <a href="" class="nav-brand">
-          <img alt="personal logo">
-        </a>
+        <a href="" class="nav-brand"></a>
 
         <a href="https://medium.com/the-coding-cairn" target="_blank">blog</a>
 
@@ -26,8 +24,8 @@
       </nav>
 
       <main class="page-content">
-        <section class="content-logo">  
-          <img alt="personal logo">
+        <section class="content-logo">
+          <img src="./public/assets/svg/km-logo-white.svg" alt="personal logo">
         </section>
 
         <section class="content-title">
@@ -35,7 +33,7 @@
         </section>
 
         <section class="content-typed">
-          <span id="typed"></span> 
+          <span id="typed" style="white-space: pre"></span>
         </section>
 
         <section class="content-articles">
@@ -69,7 +67,7 @@
           </article>
         </section>
       </main>
-    
+
       <footer class="page-footer">
         <a href="https://github.com/klintmane" target="_blank">github</a>
 
@@ -88,9 +86,10 @@
   ready(function() {
     var typed = new Typed('#typed', {
       strings: [
-        'npm run greeting ^500.^500.^500.',
-        '> Hey, I see you!',
-        '> I am a full stack software engineer from Tirana, Albania, currently programming the World Wide Web.'
+        '$ npm run greeting ^300.^300.^300.',
+        'Hi there!',
+        'I write prose for computers. Poetry, if it\'s good enough.^1000\nMy official description would be something like this:',
+        'A full stack software engineer from Tirana, Albania, currently programming the World Wide Web.'
       ],
       typeSpeed: 20,
       cursorChar: '_',

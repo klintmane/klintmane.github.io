@@ -70,17 +70,25 @@ ul>li:before {
   padding: 4px;
 }
 
-.nav-brand>img {
-  content: url("../assets/svg/km-logo.svg");
-  width: 20px;
-  height: 20px;
+
+.nav-brand {
+  background-image: url("../assets/svg/km-logo.svg");
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 2px solid black;
   border-radius: 50%;
+  display: inline-block;
+  padding: 20px;
 }
 
-.nav-brand:hover>img {
-  content: url("../assets/svg/km-logo-white.svg");
+
+.nav-brand:hover {
   background: #422D88;
+  background-image: url("../assets/svg/km-logo-white.svg");
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
   border-color: white;
 }
 
@@ -106,7 +114,6 @@ ul>li:before {
 
 .content-logo>img {
   width: 90px;
-  content: url("../assets/svg/km-logo-white.svg");
 }
 
 .content-typed {
