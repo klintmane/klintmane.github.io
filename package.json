@@ -14,6 +14,6 @@
   },
   "scripts": {
     "start": "parcel public/index.html",
-    "build": "parcel build public/index.html"
+    "build": "rm -rf ./dist && parcel build public/index.html"
   }
 }
