@@ -324,14 +324,14 @@ var r=require("unist-util-visit-parents");function e(){return function(e){return
         const ReactMarkdown = require('react-markdown');
         module.exports = function() { return React.createElement(
           ReactMarkdown,
-          {source: `# Test\n\nThis is a test posts. Don't take it too seriously.\n`},
+          {source: `# Test\n\nThis is a test post. Don't take it too seriously.\n`},
           null
         ); };
       
 },{"react":"1n8/","react-markdown":"4jR9"}],"9QpV":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var e=t(require("./2018-10-18.md"));function t(e){return e&&e.__esModule?e:{default:e}}var r=[{date:"2018-10-18",title:"Test",Markdown:e.default}].sort(function(e,t){return new Date(e.date)<new Date(t.date)});exports.default=r;
 },{"./2018-10-18.md":"4GVj"}],"v7hD":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var t=[{title:"Ape",description:"A dynamic, general-purpose programming language",link:"https://github.com/klintmane/ape"},{title:"Trails",description:"A simple, context-based HTTP router implementation in Go",link:"https://github.com/klintmane/trails"},{title:"Redux Modulist",description:"Modularizes the architecture of your Redux applications",link:"https://github.com/turningspace/redux-modulist"}];exports.default=t;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var e=[{title:"Ape",description:"A dynamic, general-purpose programming language",link:"//ape-lang.github.io"},{title:"Trails",description:"A simple, context-based HTTP router implementation in Go",link:"//github.com/klintmane/trails"},{title:"Redux Modulist",description:"Modularizes the architecture of your Redux applications",link:"//github.com/turningspace/redux-modulist"}];exports.default=e;
 },{}],"0HjF":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var e=r(require("./posts")),t=r(require("./projects"));function r(e){return e&&e.__esModule?e:{default:e}}var s={posts:e.default,projects:t.default};exports.default=s;
 },{"./posts":"9QpV","./projects":"v7hD"}],"8WvL":[function(require,module,exports) {
@@ -381,4 +381,4 @@ module.exports="/avatar.e79a34c4.jpg";
 },{"react":"1n8/","react-router-dom":"obMO","./style":"/DJl","./content":"0HjF","./components/Footer":"V5TK","./components/Nav":"qXrH","./pages/Contact":"czFY","./pages/Home":"yPRq","./pages/Music":"4fZD","./pages/Photography":"nJQM","./pages/Post":"z/c6","./pages/Posts":"1A+M","./pages/Projects":"bCPw"}],"2u/B":[function(require,module,exports) {
 "use strict";var e=u(require("react")),r=u(require("react-dom")),t=u(require("./App"));function u(e){return e&&e.__esModule?e:{default:e}}r.default.render(e.default.createElement(t.default,null),document.getElementById("root"));
 },{"react":"1n8/","react-dom":"NKHc","./App":"QxmF"}]},{},["2u/B"], null)
-//# sourceMappingURL=/src.97a8f1a4.map
+//# sourceMappingURL=/src.0adeaf93.map
