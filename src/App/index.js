@@ -4,7 +4,7 @@ import "./style.css";
 const App = props => {
   return (
     <div className="app">
-      <img src="https://en.gravatar.com/avatar/f443f4f495d6d44947b674a09abd6f47?s=500" />
+      <img src="https://en.gravatar.com/avatar/f443f4f495d6d44947b674a09abd6f47?s=200" />
       <header>Klint Mane</header>
       <ul>
         <li>
