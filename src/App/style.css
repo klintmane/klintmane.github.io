@@ -25,10 +25,7 @@ body {
   justify-content: center;
   align-items: center;
 
-  background-color: #3f5d2b;
-  background: url(https://images.unsplash.com/photo-1516528060732-e9b76180f7a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80);
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: linear-gradient(rgb(231, 207, 203) 0%, rgb(131, 111, 102) 100%);
 }
 
 .app,
