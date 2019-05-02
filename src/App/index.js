@@ -1,53 +1,81 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
-import * as Style from "./style";
-
-import content from "./content";
-
-import Footer from "./components/Footer";
-import Nav from "./components/Nav";
-
-import Contact from "./pages/Contact";
-import Home from "./pages/Home";
-import Music from "./pages/Music";
-import Photography from "./pages/Photography";
-import Post from "./pages/Post";
-import Posts from "./pages/Posts";
-import Projects from "./pages/Projects";
-
-const withContent = Comp => props => <Comp {...props} content={content} />;
-
-const routes = [
-  { path: "/", exact: true, component: Home },
-  { path: "/contact", component: Contact },
-  { path: "/music", component: Music },
-  { path: "/photography", component: Photography },
-  { path: "/posts/:date", component: Post },
-  { path: "/posts", component: Posts },
-  { path: "/projects", component: Projects }
-];
+import "./style.css";
 
 const App = props => {
   return (
-    <Router>
-      <div className={Style.Container}>
-        <Nav />
-        <div className={Style.Page}>
-          <Switch>
-            {routes.map(({ path, exact, component }) => (
-              <Route
-                key={path}
-                path={path}
-                exact={exact}
-                component={withContent(component)}
-              />
-            ))}
-          </Switch>
-        </div>
-        <Footer />
-      </div>
-    </Router>
+    <div className="app">
+      <img src="https://en.gravatar.com/avatar/f443f4f495d6d44947b674a09abd6f47?s=500" />
+      <header>Klint Mane</header>
+      <ul>
+        <li>
+          <a
+            href="https://github.com/klintmane"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Software
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://unsplash.com/@klintmane"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Photography
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://soundcloud.com/klintmane"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Music
+          </a>
+        </li>
+      </ul>
+      <footer>
+        <ul>
+          <li>
+            <a
+              href="https://twitter.com/klintmane"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <i class="fab fa-twitter" />
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://instagram.com/klintmane"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <i class="fab fa-instagram" />
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/klintmane"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <i class="fab fa-github" />
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://linkedin.com/in/klintmane"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <i class="fab fa-linkedin-in" />
+            </a>
+          </li>
+        </ul>
+      </footer>
+    </div>
   );
 };
 
