@@ -20,4 +20,4 @@ var e=arguments[3];Object.defineProperty(exports,"__esModule",{value:!0});var n=
 },{"react":"1n8/","./style.css":"g5AW"}],"2u/B":[function(require,module,exports) {
 "use strict";var e=u(require("react")),r=u(require("react-dom")),t=u(require("./App"));function u(e){return e&&e.__esModule?e:{default:e}}r.default.render(e.default.createElement(t.default,null),document.body);
 },{"react":"1n8/","react-dom":"NKHc","./App":"QxmF"}]},{},["2u/B"], null)
-//# sourceMappingURL=/src.430d73f8.js.map
+//# sourceMappingURL=/src.54a6dad1.js.map
