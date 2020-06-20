@@ -1,0 +1,37 @@
+.templates-blog-post {
+}
+
+.templates-blog-post > header > h1 {
+  margin: 0;
+}
+
+.templates-blog-post > header > p {
+  margin-top: 1rem;
+  color: #888;
+}
+
+.templates-blog-post > footer {
+  border: 0.1rem dashed #eee;
+  padding: 1rem 2rem;
+  margin: 2rem 0;
+}
+
+.templates-blog-post-nav {
+}
+
+.templates-blog-post-nav > ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+}
+
+.templates-blog-post-nav > ul > li {
+  margin: 0;
+}
+
+.templates-blog-post-nav > ul > li > a {
+  display: flex;
+  align-items: center;
+}

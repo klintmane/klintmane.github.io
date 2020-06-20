@@ -1,0 +1,30 @@
+.components-bio {
+  display: flex;
+  font-size: 1.3rem;
+}
+
+.components-bio-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-left: 1rem;
+}
+
+.components-bio-content > .image {
+  border-radius: 50%;
+}
+
+.components-bio-content > .social {
+  display: flex;
+  list-style: none;
+  margin: 0;
+}
+
+.components-bio-content > .social > li {
+  margin: 0;
+  margin-left: 1rem;
+}
+
+.components-bio-image {
+}

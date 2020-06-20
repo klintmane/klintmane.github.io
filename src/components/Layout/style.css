@@ -1,0 +1,19 @@
+.components-layout {
+  width: 80vw;
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.components-layout > nav {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.components-layout > nav img {
+  height: 1.5rem;
+}
+
+.components-layout > footer {
+  margin: 2rem 0;
+}
