@@ -5,10 +5,8 @@
 
 .components-bio-content {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  margin-left: 1rem;
 }
 
 .components-bio-content > .image {
@@ -23,8 +21,29 @@
 
 .components-bio-content > .social > li {
   margin: 0;
+}
+
+.components-bio-content > .social > li + li {
   margin-left: 1rem;
 }
 
-.components-bio-image {
+@media only screen and (max-width: 768px) {
+  .components-bio {
+    flex-direction: column;
+  }
+
+  .components-bio-content {
+    margin-top: 1rem;
+  }
+
+  .components-bio-content > .image {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .components-bio-content {
+    flex-direction: column;
+    margin-left: 1rem;
+  }
 }
