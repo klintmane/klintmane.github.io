@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Klint Mane]]></title><description><![CDATA[A starter blog demonstrating what Gatsby can do.]]></description><link>https://klintm.com</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 20 Jun 2020 11:42:17 GMT</lastBuildDate><item><title><![CDATA[Baby's First WebGL Program]]></title><description><![CDATA[WebGL is a rasterization engine. Rasterization is the task of taking shapes represented as vectors and converting it into a raster image (a…]]></description><link>https://klintm.com/babys-first-webgl-program/</link><guid isPermaLink="false">https://klintm.com/babys-first-webgl-program/</guid><pubDate>Thu, 18 Jun 2020 15:42:03 GMT</pubDate><content:encoded>&lt;p&gt;WebGL is a rasterization engine. Rasterization is the task of taking shapes represented as vectors and converting it into a raster image (a collection of points and lines).&lt;/p&gt;
+&lt;h2&gt;Shaders&lt;/h2&gt;
+&lt;p&gt;To use WebGL we provide two functions, called &lt;em&gt;shaders&lt;/em&gt; which are written in a C-like language called &lt;em&gt;GLSL&lt;/em&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Vertex Shader&lt;/li&gt;
+&lt;li&gt;Fragment Shader&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The two together make up a &lt;em&gt;shader program&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;When rasterizing (running the program), WebGL sets up some state for these functions and runs them consecutively by calling &lt;code class=&quot;language-text&quot;&gt;gl.drawArrays&lt;/code&gt; or &lt;code class=&quot;language-text&quot;&gt;gl.drawElements&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;1) Vertex Shader&lt;/h3&gt;
+&lt;p&gt;It computes the position of vertices. Depending on what the vertex shader function returns, WebGL rasterizes points, lines or triangles.&lt;/p&gt;
+&lt;h3&gt;2) Fragment Shader&lt;/h3&gt;
+&lt;p&gt;It computes the color for each pixel being rasterized.&lt;/p&gt;
+&lt;h2&gt;Shader Data&lt;/h2&gt;
+&lt;p&gt;When WebGL sets up state for the shaders, it can be passed to the shaders in the following ways:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Uniforms&lt;/li&gt;
+&lt;li&gt;Buffers and Attributes&lt;/li&gt;
+&lt;li&gt;Textures&lt;/li&gt;
+&lt;li&gt;Varyings&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;1) Uniforms&lt;/h3&gt;
+&lt;p&gt;They’re basically global variables which the shaders can access.&lt;/p&gt;
+&lt;h3&gt;2) Buffers and Attributes&lt;/h3&gt;
+&lt;h4&gt;Buffers&lt;/h4&gt;
+&lt;p&gt;Arrays of binary data which are uploaded to the GPU. You can put whatever you want in them, usually things like: &lt;em&gt;positions, normals, texture coordinates, vertex colors&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Buffers are not random-access. Every time shaders are run, the buffer is sequentially read and assigned to an attribute.&lt;/p&gt;
+&lt;h4&gt;Attributes&lt;/h4&gt;
+&lt;p&gt;They specify how the binary data should be pulled from the buffers (the offset of each attribute, its size in bytes etc.).&lt;/p&gt;
+&lt;h3&gt;3) Textures&lt;/h3&gt;
+&lt;p&gt;Unlike buffers they’re random-access arrays of data which are commonly used for, but not limited to, holding image data.&lt;/p&gt;
+&lt;h3&gt;4) Varyings&lt;/h3&gt;
+&lt;p&gt;Values used for passing data between shaders. When a varying variable is defined on the vertex shader, its value will be interpolated on the fragment shader.&lt;/p&gt;
+&lt;h2&gt;Creating a Program&lt;/h2&gt;
+&lt;p&gt;When creating a WebGL program, it uses its own coordinate space, called the &lt;em&gt;clip space&lt;/em&gt;. It goes from -1 to 1 on each dimension (x, y, z) and everything beyond that is clipped, hence the name.&lt;/p&gt;
+&lt;p&gt;The vertex shader takes care of providing clip space coordinates for the data we want to render, while the fragment shader provides color information.&lt;/p&gt;
+&lt;p&gt;Let’s write a vertex shader:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;cpp&quot;&gt;&lt;pre class=&quot;language-cpp&quot;&gt;&lt;code class=&quot;language-cpp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// an attribute, maps every 4 values (vec4) of the buffer to a_position&lt;/span&gt;
+attribute vec4 a_position&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// the shader function&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// special variable the vertex shader sets&lt;/span&gt;
+  gl_Position &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; a_position&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Let’s write a fragment shader:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;cpp&quot;&gt;&lt;pre class=&quot;language-cpp&quot;&gt;&lt;code class=&quot;language-cpp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// fragment shaders need a precision specified, mediump = medium precision&lt;/span&gt;
+precision mediump &lt;span class=&quot;token keyword&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// special variable the vertex shader sets&lt;/span&gt;
+  gl_FragColor &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;vec4&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// = RGBA(255, 0, 127, 255)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Let’s create a web projects with a canvas where WebGL will render:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;html&quot;&gt;&lt;pre class=&quot;language-html&quot;&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;canvas&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;c&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;canvas&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token script&quot;&gt;&lt;span class=&quot;token language-javascript&quot;&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; canvas &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; document&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;querySelector&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;#c&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// Gets the canvas element&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; gl &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;webgl&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// Gets a WebGL context for the canvas&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We’ll store the shaders we defined earlier into strings (since we will be using JavaScript).&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; vertSrc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; fragSrc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Write a function that will create a shader from the source (strings or tags) we created:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; type&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; source&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; shader &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;type&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// creates a shader&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;shaderSource&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; source&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// attaches the source&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;compileShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// compiles the source&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;// Error Handling&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getShaderParameter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;COMPILE_STATUS&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; shader
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getShaderInfoLog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;deleteShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And finally create the two shaders:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; vertShader &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;VERTEX_SHADER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertSrc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; fragShader &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;FRAGMENT_SHADER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragSrc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We also need to write a function that will link the shaders to create a program:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertShader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; program &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// creates a program&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;attachShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertShader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// attaches the vertex shader&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;attachShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragShader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// attaches the fragment shader&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;linkProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// links the two shaders together&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;// Error Handling&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getProgramParameter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;LINK_STATUS&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; program
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getProgramInfoLog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;deleteProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And create the program:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; program &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertShader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragShader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Initialization&lt;/h2&gt;
+&lt;p&gt;After we have created the program we can initialize its environment.&lt;/p&gt;
+&lt;p&gt;We can get the location of an attribute to later reference it. We can also get the buffer and save data on it.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; positionAttrLoc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getAttribLocation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;a_position&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// gets the attribute location&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; positionBuffer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createBuffer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// creates a buffer&lt;/span&gt;
+gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;bindBuffer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;ARRAY_BUFFER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; positionBuffer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// binds the buffer to a bind point (ARRAY_BUFFER) so it can be referenced elsewhere&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// A triangle - three 2D points stored in a Float32Array (WebGL requires strong typing)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; triangle &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Float32Array&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0.7&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// copies the triangle to the buffer at the ARRAY_BUFFER bind point&lt;/span&gt;
+gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;bufferData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;ARRAY_BUFFER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; triangle&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;STATIC_DRAW&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// STATIC_DRAW - tells WebGL the data will be static (not likely to change)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Rendering&lt;/h2&gt;
+&lt;p&gt;First, let’s create a function to resize the canvas. This is optional, but helps with HD-DPI displays as CSS pixels do not always map to real pixels (smartphones etc.).&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;gl&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; w &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Math&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;floor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;clientWidth &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; window&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;devicePixelRatio&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; h &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Math&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;floor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;clientHeight &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; window&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;devicePixelRatio&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;width &lt;span class=&quot;token operator&quot;&gt;!==&lt;/span&gt; w &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;width &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; w&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;height &lt;span class=&quot;token operator&quot;&gt;!==&lt;/span&gt; h &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;height &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; h&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Let’s define how WebGLs clip space relates to our canvas. On the &lt;code class=&quot;language-text&quot;&gt;x&lt;/code&gt; axis &lt;code class=&quot;language-text&quot;&gt;-1 &amp;lt;-&amp;gt; 1&lt;/code&gt; for us means &lt;code class=&quot;language-text&quot;&gt;0 &amp;lt;-&amp;gt; canvas.width&lt;/code&gt; and on the &lt;code class=&quot;language-text&quot;&gt;y&lt;/code&gt; axis &lt;code class=&quot;language-text&quot;&gt;0 &amp;lt;-&amp;gt; canvas.height&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;viewport&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;width&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;height&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And let’s also clear the canvas color:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;clearColor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;clear&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;COLOR_BUFFER_BIT&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now we can use the program we defined on the gl context:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;useProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Next, we’ll setup the attributes.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;enableVertexAttribArray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;positionAttrLoc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And the buffer.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// bind the positionBuffer to the gl.ARRAY_BUFFER bind point&lt;/span&gt;
+gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;bindBuffer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;ARRAY_BUFFER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; positionBuffer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// a_positon is vec4 [x,y,z,w], size 2 tells it to get [x,y] from the buffer and default the rest&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; size &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; type &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;FLOAT&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// data type is Float32&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; normalize &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// don&apos;t normalize the data&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; stride &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 0 = no skipping bytes, we move to the next element (size * sizeof(el))&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; offset &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 0 = start at first byte&lt;/span&gt;
+
+gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;vertexAttribPointer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;positionAttrLoc&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; size&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; type&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; normalize&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; stride&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; offset&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;// positionBuffer (on ARRAY_BUFFER) was bound to the attribute, ARRAY_BUFFER is now free to be rebound&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We can now run our program:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; primitiveType &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;TRIANGLES&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// we need to draw a triangle&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; offset &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// start at the beginning of the triangle array&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; count &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// we have 6 elements, corresponding to 3 points&lt;/span&gt;
+
+gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;drawArrays&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;primitiveType&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; offset&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; count&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In our vertex shader we are using clip space coordinates, the real coordinates would be like this if the canvas was 400x300 px.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;clip space&lt;/th&gt;
+&lt;th&gt;screen space&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0, 0&lt;/td&gt;
+&lt;td&gt;200, 150&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0, 0.5&lt;/td&gt;
+&lt;td&gt;200, 225&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0.7, 0&lt;/td&gt;
+&lt;td&gt;340, 150&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;And in our fragment shader we are using normalized values for &lt;code class=&quot;language-text&quot;&gt;gl_FragColor&lt;/code&gt; which expressed in RGBA (8 bits per channel) would be:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;gl_FragColor&lt;/th&gt;
+&lt;th&gt;RGBA&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1, 0, 0.5, 1&lt;/td&gt;
+&lt;td&gt;255, 0, 127, 255&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Here’s the full example:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;html&quot;&gt;&lt;pre class=&quot;language-html&quot;&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;canvas&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;c&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;canvas&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token script&quot;&gt;&lt;span class=&quot;token language-javascript&quot;&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; type&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; source&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; shader &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;type&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;shaderSource&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; source&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;compileShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getShaderParameter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;COMPILE_STATUS&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; shader
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getShaderInfoLog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;deleteShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;shader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertShader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; program &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;attachShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertShader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;attachShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragShader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;linkProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getProgramParameter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;LINK_STATUS&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; program
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getProgramInfoLog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;deleteProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;gl&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; w &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Math&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;floor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;clientWidth &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; window&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;devicePixelRatio&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; h &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Math&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;floor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;clientHeight &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; window&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;devicePixelRatio&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;width &lt;span class=&quot;token operator&quot;&gt;!==&lt;/span&gt; w &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;width &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; w&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;height &lt;span class=&quot;token operator&quot;&gt;!==&lt;/span&gt; h &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;height &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; h&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token script&quot;&gt;&lt;span class=&quot;token language-javascript&quot;&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; canvas &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; document&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;querySelector&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;#c&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; gl &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;webgl&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; vertSrc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;
+    attribute vec4 a_position; 
+
+    void main() {
+      gl_Position = a_position; 
+    }
+  &lt;/span&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; fragSrc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;
+    precision mediump float; 
+
+    void main() {
+      gl_FragColor = vec4(1, 0, 0.5, 1);
+    }
+  &lt;/span&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; vertShader &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;VERTEX_SHADER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertSrc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; fragShader &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createShader&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;FRAGMENT_SHADER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragSrc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; program &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;createProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; vertShader&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fragShader&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;// Initialization&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; positionAttrLoc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getAttribLocation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;a_position&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; positionBuffer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createBuffer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;bindBuffer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;ARRAY_BUFFER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; positionBuffer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; triangle &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Float32Array&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0.7&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;bufferData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;ARRAY_BUFFER&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; triangle&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;STATIC_DRAW&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;// Rendering&lt;/span&gt;
+
+  &lt;span class=&quot;token function&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;viewport&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;width&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;canvas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;height&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;clearColor&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;clear&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;COLOR_BUFFER_BIT&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;useProgram&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;program&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;enableVertexAttribArray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;positionAttrLoc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;vertexAttribPointer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;positionAttrLoc&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;FLOAT&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;drawArrays&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;TRIANGLES&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[New Beginnings]]></title><description><![CDATA[Far far away, behind the word mountains, far from the countries Vokalia and
+Consonantia, there live the blind texts. Separated they live in…]]></description><link>https://klintm.com/new-beginnings/</link><guid isPermaLink="false">https://klintm.com/new-beginnings/</guid><pubDate>Thu, 28 May 2015 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;Far far away, behind the word mountains, far from the countries Vokalia and
+Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
+right at the coast of the Semantics, a large language ocean. A small river named
+Duden flows by their place and supplies it with the necessary regelialia.&lt;/p&gt;
+&lt;h2&gt;On deer horse aboard tritely yikes and much&lt;/h2&gt;
+&lt;p&gt;The Big Oxmox advised her not to do so, because there were thousands of bad
+Commas, wild Question Marks and devious Semikoli, but the Little Blind Text
+didn’t listen. She packed her seven versalia, put her initial into the belt and
+made herself on the way.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;This however showed weasel&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Well uncritical so misled&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;this is very interesting&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Goodness much until that fluid owl&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When she reached the first hills of the &lt;strong&gt;Italic Mountains&lt;/strong&gt;, she had a last
+view back on the skyline of her hometown &lt;em&gt;Bookmarksgrove&lt;/em&gt;, the headline of
+&lt;a href=&quot;http://google.com&quot;&gt;Alphabet Village&lt;/a&gt; and the subline of her own road, the Line
+Lane. Pityful a rhetoric question ran over her cheek, then she continued her
+way. On her way she met a copy.&lt;/p&gt;
+&lt;h3&gt;Overlaid the jeepers uselessly much excluding&lt;/h3&gt;
+&lt;p&gt;But nothing the copy said could convince her and so it didn’t take long until a
+few insidious Copy Writers ambushed her, made her drunk with
+&lt;a href=&quot;http://google.com&quot;&gt;Longe and Parole&lt;/a&gt; and dragged her into their agency, where
+they abused her for their projects again and again. And if she hasn’t been
+rewritten, then they are still using her.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Far far away, behind the word mountains, far from the countries Vokalia and
+Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
+right at the coast of the Semantics, a large language ocean.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;It is a paradisematic country, in which roasted parts of sentences fly into your
+mouth. Even the all-powerful Pointing has no control about the blind texts it is
+an almost unorthographic life One day however a small line of blind text by the
+name of Lorem Ipsum decided to leave for the far World of Grammar.&lt;/p&gt;
+&lt;h3&gt;According a funnily until pre-set or arrogant well cheerful&lt;/h3&gt;
+&lt;p&gt;The Big Oxmox advised her not to do so, because there were thousands of bad
+Commas, wild Question Marks and devious Semikoli, but the Little Blind Text
+didn’t listen. She packed her seven versalia, put her initial into the belt and
+made herself on the way.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;So baboon this&lt;/li&gt;
+&lt;li&gt;Mounted militant weasel gregariously admonishingly straightly hey&lt;/li&gt;
+&lt;li&gt;Dear foresaw hungry and much some overhung&lt;/li&gt;
+&lt;li&gt;Rash opossum less because less some amid besides yikes jeepers frenetic
+impassive fruitlessly shut&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;When she reached the first hills of the Italic Mountains, she had a last view
+back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet
+Village and the subline of her own road, the Line Lane. Pityful a rhetoric
+question ran over her cheek, then she continued her way. On her way she met a
+copy.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The copy warned the Little Blind Text, that where it came from it would have
+been rewritten a thousand times and everything that was left from its origin
+would be the word “and” and the Little Blind Text should turn around and
+return to its own, safe country.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;But nothing the copy said could convince her and so it didn’t take long until a
+few insidious Copy Writers ambushed her, made her drunk with Longe and Parole
+and dragged her into their agency, where they abused her for their projects
+again and again. And if she hasn’t been rewritten, then they are still using
+her. Far far away, behind the word mountains, far from the countries Vokalia and
+Consonantia, there live the blind texts.&lt;/p&gt;
+&lt;h4&gt;Silent delightfully including because before one up barring chameleon&lt;/h4&gt;
+&lt;p&gt;Separated they live in Bookmarksgrove right at the coast of the Semantics, a
+large language ocean. A small river named Duden flows by their place and
+supplies it with the necessary regelialia. It is a paradisematic country, in
+which roasted parts of sentences fly into your mouth.&lt;/p&gt;
+&lt;p&gt;Even the all-powerful Pointing has no control about the blind texts it is an
+almost unorthographic life One day however a small line of blind text by the
+name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox
+advised her not to do so, because there were thousands of bad Commas, wild
+Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.&lt;/p&gt;
+&lt;h5&gt;Wherever far wow thus a squirrel raccoon jeez jaguar this from along&lt;/h5&gt;
+&lt;p&gt;She packed her seven versalia, put her initial into the belt and made herself on
+the way. When she reached the first hills of the Italic Mountains, she had a
+last view back on the skyline of her hometown Bookmarksgrove, the headline of
+Alphabet Village and the subline of her own road, the Line Lane. Pityful a
+rhetoric question ran over her cheek, then she continued her way. On her way she
+met a copy.&lt;/p&gt;
+&lt;h6&gt;Slapped cozy a that lightheartedly and far&lt;/h6&gt;
+&lt;p&gt;The copy warned the Little Blind Text, that where it came from it would have
+been rewritten a thousand times and everything that was left from its origin
+would be the word “and” and the Little Blind Text should turn around and return
+to its own, safe country. But nothing the copy said could convince her and so it
+didn’t take long until a few insidious Copy Writers ambushed her, made her drunk
+with Longe and Parole and dragged her into their agency, where they abused her
+for their projects again and again.&lt;/p&gt;</content:encoded></item></channel></rss>
